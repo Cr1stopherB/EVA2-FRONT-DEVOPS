@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Configurar credenciales AWS
-      uses: actions/configure-aws-credentials@v4
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -32,7 +32,7 @@ jobs:
     - name: Desplegar Frontend vía SSM
       run: |
         aws ssm send-command \
-          --instance-ids ${{ secrets.EC2_FRONT_INSTANCE_ID }} \
+          --instance-ids ${{ secrets.EC2_FRONTEND_INSTANCE_ID }} \
           --document-name "AWS-RunShellScript" \
           --comment "Desplegando Frontend" \
           --parameters '{"commands":[
