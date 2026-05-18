@@ -39,8 +39,8 @@ jobs:
             "set -e",
             "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}",
             "docker pull ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest",
-            "docker stop innovatech-frontend || true",
-            "docker rm innovatech-frontend || true",
+            "docker stop innovatech-frontend tienda-frontend || true",
+            "docker rm innovatech-frontend tienda-frontend || true",
             "docker run -d --name innovatech-frontend -p 80:80 ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest"
           ]}' \
           --output text
