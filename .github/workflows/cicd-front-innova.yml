@@ -10,34 +10,31 @@ jobs:
 
     steps:
     - name: Checkout código
-      uses: aws-actions/checkout@v4
+      uses: actions/checkout@v4
 
     - name: Configurar credenciales AWS
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} # Crítico para Academy
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login en Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build y Push Frontend
+    - name: Build imagen Frontend y push a ECR
       run: |
-        # Construye la imagen usando el Dockerfile en la raíz
         docker build -t tienda-frontend .
-        # Etiqueta la imagen con la URL de tu repo ECR
         docker tag tienda-frontend:latest ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
-        # Sube la imagen a la nube de AWS
         docker push ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
 
     - name: Desplegar Frontend vía SSM
       run: |
         aws ssm send-command \
-          --instance-ids ${{ secrets.EC2_FRONTEND_INSTANCE_ID }} \
+          --instance-ids ${{ secrets.EC2_FRONT_INSTANCE_ID }} \
           --document-name "AWS-RunShellScript" \
-          --comment "Desplegando Frontend en EC2" \
+          --comment "Desplegando Frontend" \
           --parameters '{"commands":[
             "set -e",
             "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}",
