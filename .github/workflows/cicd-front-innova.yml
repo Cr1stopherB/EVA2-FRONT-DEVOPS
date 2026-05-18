@@ -1,4 +1,4 @@
-name: CI/CD Tienda Perritos - Frontend
+name: CI/CD Innovatech - Frontend
 
 on:
   push:
@@ -25,8 +25,8 @@ jobs:
 
     - name: Build imagen Frontend y push a ECR
       run: |
-        docker build -t tienda-frontend .
-        docker tag tienda-frontend:latest ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
+        docker build -t innovatech-frontend .
+        docker tag innovatech-frontend:latest ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
         docker push ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
 
     - name: Desplegar Frontend vía SSM
@@ -39,8 +39,8 @@ jobs:
             "set -e",
             "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}",
             "docker pull ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest",
-            "docker stop tienda-frontend || true",
-            "docker rm tienda-frontend || true",
-            "docker run -d --name tienda-frontend -p 80:80 ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest"
+            "docker stop innovatech-frontend || true",
+            "docker rm innovatech-frontend || true",
+            "docker run -d --name innovatech-frontend -p 80:80 ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest"
           ]}' \
           --output text
