@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  innovatech-frontend:
+    build: .
+    container_name: innovatech-frontend
+    ports:
+      - "80:80"
+    environment:
+      - BACKEND_URL=http://tu-ip-publica-backend:3001
