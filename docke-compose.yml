@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  tienda-frontend:
+    build: .
+    container_name: tienda-frontend
+    ports:
+      - "80:80"
+    environment:
+      - BACKEND_URL=http://tu-ip-publica-backend:3001
